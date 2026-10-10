@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp Học Thầy Andrew - Trang Học Tập & Tài Liệu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER & HERO SECTION -->
+    <header class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-blue-900 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative z-10 flex flex-col items-center text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-800/80 border border-indigo-700 text-indigo-200 text-sm font-semibold mb-6 shadow-inner">
+                <i class="fa-solid fa-graduation-cap text-yellow-400"></i> Hệ Thống Học Tập Trực Tuyến
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
+                Lớp Học Thầy Andrew
+            </h1>
+            <p class="text-lg md:text-xl text-indigo-200 max-w-2xl font-light mb-8">
+                "Nâng tầm tri thức, chinh phục đỉnh cao Anh ngữ cùng phương pháp học tập hiện đại và hiệu quả."
+            </p>
+
+            <!-- SEARCH BAR -->
+            <div class="w-full max-w-xl relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input type="text" id="searchInput" oninput="filterMaterials()" placeholder="Tìm kiếm tên bài học, từ vựng, tài liệu..." 
+                    class="w-full pl-11 pr-4 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all shadow-lg">
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        
+        <!-- FILTER TABS -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Danh Sách Tài Liệu</h2>
+                <span id="totalCount" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full">0</span>
+            </div>
+
+            <div class="flex flex-wrap gap-2" id="categoryTabs">
+                <button onclick="filterCategory('All')" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-200">Tất cả</button>
+                <button onclick="filterCategory('Lecture')" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Bài giảng</button>
+                <button onclick="filterCategory('Homework')" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Bài tập</button>
+                <button onclick="filterCategory('Vocabulary')" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Từ vựng</button>
+                <button onclick="filterCategory('Exam')" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Đề thi thử</button>
+            </div>
+        </div>
+
+        <!-- CARDS GRID -->
+        <div id="materialsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dữ liệu được render tự động từ JavaScript -->
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="w-20 h-20 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700">Không tìm thấy tài liệu phù hợp</h3>
+            <p class="text-slate-500 text-sm mt-1">Hãy thử tìm kiếm với từ khóa khác hoặc chọn danh mục khác nhé!</p>
+        </div>
+    </main>
+
+    <!-- MODAL VIEWER -->
+    <div id="pdfModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-file-lines text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="font-bold text-base sm:text-lg line-clamp-1">Tên Tài Liệu</h3>
+                        <p class="text-xs text-slate-400">Xem trực tiếp tài liệu học tập</p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Google Docs Viewer Iframe) -->
+            <div class="flex-grow bg-slate-100 relative">
+                <div id="modalLoader" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span class="text-sm font-medium text-slate-600">Đang tải tài liệu...</span>
+                    </div>
+                </div>
+                <iframe id="viewerIframe" class="w-full h-full border-0" allowfullscreen></iframe>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 bg-white border-t border-slate-100 flex items-center justify-between">
+                <span class="text-xs text-slate-500 hidden sm:inline"><i class="fa-solid fa-circle-info mr-1 text-indigo-500"></i>Nếu không xem được trực tiếp, vui lòng bấm nút tải xuống bên cạnh.</span>
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <a id="modalDownloadBtn" href="#" target="_blank" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold flex items-center gap-2 shadow-lg shadow-indigo-100 transition-all">
+                        <i class="fa-solid fa-download"></i> Tải xuống file gốc
+                    </a>
+                    <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <p class="text-slate-200 font-bold text-lg">Lớp Học Thầy Andrew</p>
+                <p class="text-sm text-slate-400 mt-1">Đồng hành cùng học sinh trên con đường chinh phục tri thức.</p>
+            </div>
+            <div class="text-sm">
+                <p>&copy; 2026 Lớp Học Thầy Andrew. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & DATA -->
+    <script>
+        // ==========================================
+        // DANH SÁCH TÀI LIỆU (DỄ DÀNG THÊM/SỬA/XÓA Ở ĐÂY)
+        // ==========================================
+        const materials = [
+            {
+                id: 1,
+                title: "Unit 1: Past time 1",
+                category: "Lecture",
+                categoryName: "Bài giảng",
+                badgeColor: "bg-blue-100 text-blue-700",
+                description: "Học thì các thì quá khứ đơn và quá khứ tiếp diễn",
+                fileUrl: "https://drive.google.com/file/d/1Vu5SivTZH3x9i2nqzgZcpjjH4GpTu0Ni/view?usp=sharing"
+            },
+            {
+                id: 2,
+                title: "Unit 2: Model verbs",
+                category: "Lecture",
+                categoryName: "Bài Giảng",
+                badgeColor: "bg-emerald-100 text-emerald-700",
+                description: "Bài giảng về các cấu trúc của động từ Khuyết Thiếu",
+                fileUrl: "https://docs.google.com/presentation/d/15Q2EIIBGdqNFQUQRrRZdGjGl8jYOaZJo/edit?usp=sharing&ouid=104836136525304609180&rtpof=true&sd=true"
+            },
+            {
+                id: 3,
+                title: "Unit 3: Linking verbs",
+                category: "Lecture",
+                categoryName: "Bài Giảng",
+                badgeColor: "bg-amber-100 text-amber-700",
+                description: "Nắm rõ ba dạng động từ tiếng anh",
+                fileUrl: "https://drive.google.com/file/d/1TV_xmzMgJ1kfAPCNnZ5eLQ5vBB5EiI4l/view?usp=sharing"
+            },
+            {
+                id: 4,
+                title: "Unit 4: Gerunds and to-infinity",
+                category: "Lecture",
+                categoryName: "Bài Giảng",
+                badgeColor: "bg-purple-100 text-purple-700",
+                description: "Bài giảng về danh động từ và động từ nguyên mẫu",
+                fileUrl: "https://docs.google.com/presentation/d/1Ucjtpnz_iqo_KWL_802OaDfJ-69n3QV2/edit?usp=sharing&ouid=104836136525304609180&rtpof=true&sd=true"
+            },
+            {
+                id: 5,
+                title: "Unit 5: Present and past participles",
+                category: "Lecture",
+                categoryName: "Bài giảng",
+                badgeColor: "bg-blue-100 text-blue-700",
+                description: "Bài giảng về mệnh đề phân từ quá khứ và hiện tại",
+                fileUrl: "https://drive.google.com/file/d/1pOOW8eaHCkXJurMklfIgJmB2a8Fv1qeK/view?usp=sharing"
+            }
+        ];
+
+        let currentCategory = 'All';
+
+        // Render danh sách tài liệu ra giao diện
+        function renderMaterials(items) {
+            const grid = document.getElementById('materialsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const totalCount = document.getElementById('totalCount');
+
+            totalCount.textContent = items.length;
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = items.map(item => `
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-100 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full ${item.badgeColor}">${item.categoryName}</span>
+                            <span class="text-slate-400 text-xs font-medium"><i class="fa-regular fa-clock mr-1"></i>Mới cập nhật</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                            ${item.title}
+                        </h3>
+                        <p class="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed">
+                            ${item.description}
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                        <button onclick="openModal('${encodeURIComponent(item.title)}', '${item.fileUrl}')" 
+                            class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white text-sm font-semibold flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-eye"></i> Xem tài liệu
+                        </button>
+                        <a href="${item.fileUrl}" target="_blank" download
+                            class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-all" title="Tải xuống">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Lọc theo danh mục
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Cập nhật trạng thái nút tab
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.className = "category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+            });
+            event.target.className = "category-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-200";
+
+            filterMaterials();
+        }
+
+        // Tìm kiếm và lọc tổng hợp
+        function filterMaterials() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            let filtered = materials.filter(item => {
+                const matchCategory = currentCategory === 'All' || item.category === currentCategory;
+                const matchKeyword = item.title.toLowerCase().includes(keyword) || item.description.toLowerCase().includes(keyword);
+                return matchCategory && matchKeyword;
+            });
+
+            renderMaterials(filtered);
+        }
+
+        // Mở Modal xem tài liệu
+        function openModal(title, fileUrl) {
+            const modal = document.getElementById('pdfModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const viewerIframe = document.getElementById('viewerIframe');
+            const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+            const modalLoader = document.getElementById('modalLoader');
+
+            const decodedTitle = decodeURIComponent(title);
+            modalTitle.textContent = decodedTitle;
+            modalDownloadBtn.href = fileUrl;
+
+            // Sử dụng Google Docs Viewer để hiển thị trực tiếp PDF hoặc PowerPoint trên web
+            // (Lưu ý: Link file đưa vào phải là link công khai trực tuyến)
+            const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+            
+            modalLoader.style.display = 'flex';
+            viewerIframe.src = viewerUrl;
+
+            // Ẩn loader sau khi iframe tải xong
+            viewerIframe.onload = function() {
+                modalLoader.style.display = 'none';
+            };
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Đóng Modal
+        function closeModal() {
+            const modal = document.getElementById('pdfModal');
+            const viewerIframe = document.getElementById('viewerIframe');
+            
+            modal.classList.add('hidden');
+            viewerIframe.src = ''; // Dừng load iframe khi đóng
+            document.body.style.overflow = 'auto';
+        }
+
+        // Khởi chạy khi tải trang lần đầu
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMaterials(materials);
+        });
+
+        // Đóng modal khi nhấn phím ESC
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
